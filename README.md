@@ -27,7 +27,7 @@ npm run build
 ```
 
 ## 使用
-#### 全局加载控件
+#### 全局注册控件 方便各页面使用
 
 ```
 import header from './models/x-header.vue';
