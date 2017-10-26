@@ -102,11 +102,22 @@ config 格式字段说明：
             <!-- select -->
             <template v-else-if="model.type == 'select'">
               <el-form-item :label="model.label">
-                <el-select v-model="submitForm[model.param]" :placeholder="model.placeholder||'请选择'" style="width: 100%">
-                  <template v-for="option in model.options">
-                    <el-option :label="option.label" :value="option.value"></el-option>
-                  </template>
-                </el-select>
+
+                <template v-if="model.multiple">
+                  <el-select v-model="submitForm[model.param]" multiple :placeholder="model.placeholder||'请选择'" style="width: 100%">
+                    <template v-for="option in model.options">
+                      <el-option :label="option.label" :value="option.value"></el-option>
+                    </template>
+                  </el-select>
+                </template>
+                <template v-else>
+                  <el-select v-model="submitForm[model.param]" :placeholder="model.placeholder||'请选择'" style="width: 100%">
+                    <template v-for="option in model.options">
+                      <el-option :label="option.label" :value="option.value"></el-option>
+                    </template>
+                  </el-select>
+                </template>
+
               </el-form-item>
             </template>
 
@@ -134,56 +145,56 @@ config 格式字段说明：
 
 <script>
 
-  export default {
-    methods: {
-      datePickerFmt(param) {
-        if (typeof(this.submitForm[param]) !== "number") {
-          this.submitForm[param] = Date.parse(this.submitForm[param]);
-        }
-      }
-    },
-    data() {
-      const context = this;
-      const params = context.config.params;
-      var data = {};
-      params.map(function (items) {
-        items.map(function (item) {
-          if (item.type === "checkbox") {
-            data[item.param] = context.config.data[item.param] || [];
-          } else if (item.type) {
-            data[item.param] = context.config.data[item.param] || '';
-          }
-        })
-      });
-      return {
-        submitForm: data
-      }
-    },
-    props: {
-      config: {
-        type: Object,
-        default() {
-          return {}
-        }
-      }
-    },
-    watch: {
-      "config.data"() {
-        const context = this;
-        const params = context.config.params;
-        var data = {};
-        params.map(function (items) {
-          items.map(function (item) {
-            if (item.type === "checkbox") {
-              data[item.param] = context.config.data[item.param] || [];
-            } else if (item.type) {
-              data[item.param] = context.config.data[item.param] || '';
+    export default {
+        methods: {
+            datePickerFmt(param) {
+                if (typeof(this.submitForm[param]) !== "number") {
+                    this.submitForm[param] = Date.parse(this.submitForm[param]);
+                }
             }
-          })
-        });
-        context.submitForm = data;
-      }
+        },
+        data() {
+            const context = this;
+            const params = context.config.params;
+            var data = {};
+            params.map(function (items) {
+                items.map(function (item) {
+                    if (item.type === "checkbox") {
+                        data[item.param] = context.config.data[item.param] || [];
+                    } else if (item.type) {
+                        data[item.param] = context.config.data[item.param] || '';
+                    }
+                })
+            });
+            return {
+                submitForm: data
+            }
+        },
+        props: {
+            config: {
+                type: Object,
+                default() {
+                    return {}
+                }
+            }
+        },
+        watch: {
+            "config.data"() {
+                const context = this;
+                const params = context.config.params;
+                var data = {};
+                params.map(function (items) {
+                    items.map(function (item) {
+                        if (item.type === "checkbox") {
+                            data[item.param] = context.config.data[item.param] || [];
+                        } else if (item.type) {
+                            data[item.param] = context.config.data[item.param] || '';
+                        }
+                    })
+                });
+                context.submitForm = data;
+            }
+        }
     }
-  }
 
 </script>
